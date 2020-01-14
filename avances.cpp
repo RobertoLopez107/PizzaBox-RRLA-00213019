@@ -26,7 +26,7 @@ int main()
 //funcion
 void Menu(){
     cout<<"1. Registrar cliente . . . "<<endl; //Guarda el nombre del cliente
-    cout<<"2. "<<endl;
+    cout<<"2. "<<endl;                         //Partes a evaluar 2-5
     cout<<"3. "<<endl;
     cout<<"4. "<<endl;
     cout<<"5. "<<endl;
