@@ -6,9 +6,12 @@ using namespace std;
 void Menu(); //declarando prototipo de la funcion SIEMPRE ANTES DEL MAIN
 void atHome();
 void atRestaurant();
+void orderatHome();
+void orderatRes();
 
 string keyword = "include";
 string password;
+int user;
 
 struct domicilio{
 string name;
@@ -32,6 +35,10 @@ int paymenttype2;
 };
 
 int main(){
+
+    cout<<"Elija que tipo de usuario es: 1. Administrador 2. Empleado"<<endl;
+    cin>>user;
+
     cout << "Ingrese la contraseña: \t";
     cin >> password;
 
@@ -48,7 +55,13 @@ int main(){
         cin>>opcion;
     switch(opcion){
         case 1: atHome();
+        break;
         case 2: atRestaurant();
+        break;
+        case 3: orderatHome();
+        break;
+        case 4: orderatRes();
+        break;
      }
     }while(opcion !=0); //condicion linea 17, con el do.
 
@@ -67,11 +80,13 @@ void Menu(){
 void atHome(){ //funcion para registrar el cliente con su pedido
     domicilio dom;
 
+    cin.ignore();
+
     cout<< "Ingrese su nombre: "<<endl;
-    cin>> dom.name;
+    getline(cin, dom.name);
 
     cout<< "Ingrese su direccion: "<<endl;
-    cin>> dom.direction;
+    getline(cin, dom.direction);
 
     cout<< "Ingrese su numero de telefono"<<endl;
     cin>> dom.number;
@@ -95,8 +110,10 @@ void atHome(){ //funcion para registrar el cliente con su pedido
 void atRestaurant(){
     restaurant restau;
 
+    cin.ignore();
+
     cout<< "Ingrese su nombre: "<<endl;
-    cin>> restau.name2;
+    getline(cin, restau.name2);
 
     cout<< "Ingrese las personas que estaran en mesa: "<<endl;
     cin>> restau.peoplenum;
@@ -116,4 +133,27 @@ void atRestaurant(){
     cout<< "Tipo de pago: 1. Efectivo o Tarjeta."<<endl;
     cin>> restau.paymenttype2;
 
+}
+
+void orderatHome(){
+    domicilio dom;
+    cout<<"Nombre: "<<dom.name<<endl;
+    cout<<"Direccion: "<<dom.direction<<endl;
+    cout<<"Numero de telefono: "<<dom.number<<endl;
+    cout<<"Plato principal"<<dom.maindish<<endl;
+    cout<<"Entrada: "<<dom.starter<<endl;
+    cout<<"Bebida: "<<dom.drink<<endl;
+    cout<<"Monto: "<<dom.amount<<endl;
+    cout<<"Tipo de pago: "<<dom.paymenttype;
+}
+
+void orderatRes(){
+    restaurant restau;
+    cout<<"Nombre: "<<restau.name2<<endl;
+    cout<<"Cantidad de personas en mesa: "<<restau.peoplenum<<endl;
+    cout<<"Plato principal: "<<restau.maindish2<<endl;
+    cout<<"Entrada"<<restau.starter2<<endl;
+    cout<<"Bebida: "<<restau.drink2<<endl;
+    cout<<"Monto: "<<restau.amount2<<endl;
+    cout<<"Tipo de pago: "<<restau.paymenttype2;
 }
