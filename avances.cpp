@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include <stack>
+#include <vector>
+#include <queue>
 #define PASSWORD "include"
 
 using namespace std;
@@ -26,6 +29,11 @@ struct mainInfo{
     float total;
 };
 
+struct cola{
+    mainInfo info;
+    cola* sig;
+};
+
 struct delivery{
     address deliveryAddress;
     int cellphone;
@@ -37,6 +45,8 @@ struct houseOrder{
     int pTable;
     mainInfo houseInfo;
 };
+
+cola* queue(cola* c, mainInfo Info);
 
 bool isAdmin = false;
 int idOrder = 1;
@@ -402,4 +412,20 @@ void printOrder(houseOrder* array){
         cout << "Tipo de pago";
     }
 
+}
+
+cola* queue(cola* c, mainInfo info){
+    cola* nuevo = new cola;
+    nuevo->info = info;
+    nuevo->sig = NULL;
+
+    if(!c)
+        c = nuevo;
+    else{
+        cola* aux = c;
+        while(aux->sig)
+            aux = aux->sig;
+        aux->sig = nuevo;
+    }
+    return c;
 }
