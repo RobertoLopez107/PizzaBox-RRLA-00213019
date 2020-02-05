@@ -21,9 +21,9 @@ struct address{
 
 struct mainInfo{
     string name;
-    mainDish pDish;
-    drink pDrink;
-    starter pStarter;
+    vector <mainDish> pDish;
+    vector <drink> pDrink;
+    vector <starter> pStarter;
     paymenType pay;
     int idOrder;
     float total;
@@ -89,14 +89,14 @@ bool loginUser(void){
     switch(option){
         case 'a':
         case 'A':
-            cout << "Digite contraseña: "; cin >> enterPass;
+            cout << "Digite contraseï¿½a: "; cin >> enterPass;
 
             if(enterPass.compare(PASSWORD) == 0){
                 isAdmin = true;
                 return true;
             }
             else{
-                cout << "Contraseña incorrecta" << endl;
+                cout << "Contraseï¿½a incorrecta" << endl;
             }
 
 
@@ -242,7 +242,7 @@ void addOrder(delivery* array){
 
     for (int i = 0; i < size; i++){
         int aux = 0;
-        cout << "Nombre:\t"; getline(cin, array[i].deliveryInfo.name);
+        cout << "Nombre:\t"; getline(cin, vector<mainInfo>deliveryInfo.name);
         cout << "Direccion\t" << endl;
         cout << "Colonia:\t"; getline(cin, array[i].deliveryAddress.settlement);
         cout << "Municipio:\t"; getline(cin, array[i].deliveryAddress.municipality);
@@ -412,20 +412,4 @@ void printOrder(houseOrder* array){
         cout << "Tipo de pago";
     }
 
-}
-
-cola* queue(cola* c, mainInfo info){
-    cola* nuevo = new cola;
-    nuevo->info = info;
-    nuevo->sig = NULL;
-
-    if(!c)
-        c = nuevo;
-    else{
-        cola* aux = c;
-        while(aux->sig)
-            aux = aux->sig;
-        aux->sig = nuevo;
-    }
-    return c;
 }
