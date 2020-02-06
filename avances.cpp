@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
-#include <stack>
 #include <vector>
-#include <queue>
 #define PASSWORD "include"
 
 using namespace std;
@@ -11,8 +9,6 @@ enum mainDish {pizza, pasta, lasagna};
 enum drink {beer, soda, tea};
 enum starter {garlicBread, pizzaRolls, cheeseSticks};
 enum paymenType {cash, card};
-
-int adoN=1;
 
 struct address{
     string settlement, municipality, department;
@@ -29,16 +25,10 @@ struct mainInfo{
     float total;
 };
 
-struct cola{
-    mainInfo info;
-    cola* sig;
-};
-
 struct delivery{
     address deliveryAddress;
     int cellphone;
     mainInfo deliveryInfo;
-
 };
 
 struct houseOrder{
@@ -46,7 +36,6 @@ struct houseOrder{
     mainInfo houseInfo;
 };
 
-cola* queue(cola* c, mainInfo Info);
 
 bool isAdmin = false;
 int idOrder = 1;
@@ -56,9 +45,7 @@ void Menu(); //declarando prototipo de la funcion SIEMPRE ANTES DEL MAIN
 bool loginUser(void);
 void AdminMenu();
 void EmployeeMenu();
-void addOrder(delivery* array);
-void addOrder(houseOrder* array);
-void printOrder(delivery* array);
+mainInfo solicitarOrden();
 
 int main(void){
     int option;
@@ -115,13 +102,9 @@ bool loginUser(void){
 void AdminMenu(){
 
     int option;
-
-    //Declaracion de variables y arreglos a usar
-    delivery* dArray = NULL;
-    houseOrder* hArray = NULL;
     do{
-    cout<<"1. Agregar 1 pedido a domicilio."<<endl; //Guarda el nombre del cliente
-    cout<<"2. Agregar 1 encargo en restaurante."<<endl;                         //Partes a evaluar 2-5
+    cout<<"1. Agregar 1 pedido a domicilio."<<endl; 
+    cout<<"2. Agregar 1 encargo en restaurante."<<endl; 
     cout<<"3. Ver pedidos a domicilio."<<endl;
     cout<<"4. Ver pedidos en el restaurante."<<endl;
     cout<<"5. Despachar ordenes a domicilio"<<endl;
@@ -132,20 +115,16 @@ void AdminMenu(){
     cout<<"10. Calcular total de venta."<<endl;
     cout<<"11. Cambiar de usuario"<<endl;
     cout<<"0. Salir\n Opcion "<<endl;
-
     cin >> option;
-
-
+    
         switch (option)
         {
         case 1:
-            addOrder(dArray);
+            mainInfo solicitarOrden();
         break;
         case 2:
-            addOrder(hArray);
         break;
         case 3:
-            printOrder(dArray);
         break;
         case 4:
         break;
@@ -162,6 +141,7 @@ void AdminMenu(){
         case 10:
         break;
         case 11:
+            loginUser();
         break;
         default:
         break;
@@ -177,10 +157,6 @@ void EmployeeMenu(){
 
     int option;
 
-        //Declaracion de variables y arreglos a usar
-    delivery* dArray = NULL;
-    houseOrder* hArray = NULL;
-
     do{
 
     cout<<"1. Agregar 1 pedido a domicilio."<<endl; //Guarda el nombre del cliente
@@ -194,7 +170,6 @@ void EmployeeMenu(){
     cout<<"9. Calcular total de venta."<<endl;
     cout<<"10. Cambiar de usuario"<<endl;
     cout<<"0. Salir\n Opcion "<<endl;
-
     cin >> option;
 
 
@@ -202,13 +177,11 @@ void EmployeeMenu(){
         switch (option)
         {
         case 1:
-            addOrder(dArray);
+            mainInfo solicitarOrden();
         break;
         case 2:
-            addOrder(hArray);
         break;
         case 3:
-            printOrder(dArray);
         break;
         case 4:
         break;
@@ -223,6 +196,7 @@ void EmployeeMenu(){
         case 9:
         break;
         case 10:
+            loginUser();
         break;
         default:
         break;
@@ -233,183 +207,110 @@ void EmployeeMenu(){
     }while(option != 0);
 }
 
-void addOrder(delivery* array){
-    int size = 0;
-    cout << "Cantidad de pedidos a ingresar: "; cin >> size;
-    cin.ignore();
+vector<mainInfo> lista;
 
-    array = new delivery [size];
+mainInfo solicitarOrden(){
+    mainInfo p;
+    address a;
+
+    int size = 0;
+    cout << "Cantidad de pedidos a ingresar: ";
+    cin >> size;
+    cin.ignore();
 
     for (int i = 0; i < size; i++){
         int aux = 0;
-        cout << "Nombre:\t"; getline(cin, vector<mainInfo>deliveryInfo.name);
+        cout << "Nombre:\t"; 
+        cin >> p.name;
         cout << "Direccion\t" << endl;
-        cout << "Colonia:\t"; getline(cin, array[i].deliveryAddress.settlement);
-        cout << "Municipio:\t"; getline(cin, array[i].deliveryAddress.municipality);
-        cout << "Departamento:\t"; getline(cin, array[i].deliveryAddress.department);
-        cout << "No. casa:\t"; cin>>array[i].deliveryAddress.houseNumber;
+        cout << "Colonia:\t";
+        cin >> a.settlement;
+        cout << "Municipio:\t"; 
+        cin >> a.municipality;
+        cout << "Departamento:\t"; 
+        cin >> a.department;
+        cout << "No. casa:\t";
+        cin >> a.houseNumber; 
         cin.ignore();
 
-        cout << "Entrada" << endl;
+        cout << "Entrada: " << endl;
         cout << "1. Pan con ajo" << endl;
         cout << "2. Pizza rolls" << endl;
         cout << "3. Palitos de queso" << endl;
         cout << "Su opcion:\t"; cin >> aux;
         cin.ignore();
 
-        if(aux == 1)
-            array[i].deliveryInfo.pStarter = garlicBread;
-        else if(aux == 2)
-            array[i].deliveryInfo.pStarter = pizzaRolls;
-        else if(aux == 3)
-            array[i].deliveryInfo.pStarter = cheeseSticks;
+        int contBread = 0;
+        int contRolls = 0;
+        int contSticks = 0;
 
-        cout << "Plato principal" << endl;
-        cout << "1. Pizza" << endl;
-        cout << "2. Pasta" << endl;
-        cout << "3. Lasagna" << endl;
-        cout << "Su opcion:\t"; cin >> aux;
-        cin.ignore();
+        switch(aux){
+            case 1:
+                garlicBread;
+                contBread ++;
+            break;
+            case 2:
+                pizzaRolls;
+                contRolls ++;
+            break;
+            case 3:
+                cheeseSticks;
+                contSticks++;
+            break;
+        }
 
-        if(aux == 1)
-            array[i].deliveryInfo.pDish = pizza;
-        else if(aux == 2)
-            array[i].deliveryInfo.pDish = pasta;
-        else
-            array[i].deliveryInfo.pDish = lasagna;
+        cout << "Plato principal: " << endl;
+        cout << "1. Pizza " << endl;
+        cout << "2. Pasta " << endl;
+        cout << "3. Lasagna " << endl;
+        cin >> aux;
 
-        cout << "Bebida" << endl;
-        cout << "1. Cerveza" << endl;
-        cout << "2. Soda" << endl;
-        cout << "3. Te helado" << endl;
-        cout << "Su opcion:\t"; cin >> aux;
-        cin.ignore();
+                switch(aux){
+            case 1:
+                pizza;
+            break;
+            case 2:
+                pasta;
+            break;
+            case 3:
+                lasagna;
+            break;
+        }
 
-        if(aux == 1)
-            array[i].deliveryInfo.pDrink = beer;
-        else if(aux == 2)
-            array[i].deliveryInfo.pDrink = soda;
-        else
-            array[i].deliveryInfo.pDrink = tea;
+        cout << "Bebidas: " << endl;
+        cout << "1. Cerveza " << endl;
+        cout << "2. Soda " << endl;
+        cout << "3. Te " << endl;
+        cin >> aux;
 
-        array[i].deliveryInfo.idOrder = idOrder++;
-
-        cout << "Tipo de pago" << endl;
-        cout << "1. Tarjeta" << endl;
-        cout << "2. Efectivo" << endl;
-        cout << "Su opcion:\t"; cin >> aux;
-        cin.ignore();
-
-        if(aux == 1)
-            array[i].deliveryInfo.pay = card;
-        else
-            array[i].deliveryInfo.pay = cash;
-
-        cout << "Monto: "; cin >> array[i].deliveryInfo.total;
-        cin.ignore();
-        cout << "Telefono: "; cin >> array[i].cellphone;
-        cin.ignore();
-
-    }
-}
-
-void addOrder(houseOrder* array){
-    int size = 0;
-    cout << "Cantidad de pedidos a ingresar: "; cin >> size;
-    cin.ignore();
-
-    array = new houseOrder [size];
-
-    for (int i = 0; i < size; i++){
-        int aux = 0;
-        cout << "Nombre:\t"; getline(cin, array[i].houseInfo.name);
-
-
-        cout << "Entrada" << endl;
-        cout << "1. Pan con ajo" << endl;
-        cout << "2. Pizza rolls" << endl;
-        cout << "3. Palitos de queso" << endl;
-        cout << "Su opcion:\t"; cin >> aux;
-        cin.ignore();
-
-        if(aux == 1)
-            array[i].houseInfo.pStarter = garlicBread;
-        else if(aux == 2)
-            array[i].houseInfo.pStarter = pizzaRolls;
-        else if(aux == 3)
-            array[i].houseInfo.pStarter = cheeseSticks;
-
-        cout << "Plato principal" << endl;
-        cout << "1. Pizza" << endl;
-        cout << "2. Pasta" << endl;
-        cout << "3. Lasagna" << endl
-;        cout << "Su opcion:\t"; cin >> aux;
-        cin.ignore();
-
-        if(aux == 1)
-            array[i].houseInfo.pDish = pizza;
-        else if(aux == 2)
-            array[i].houseInfo.pDish = pasta;
-        else
-            array[i].houseInfo.pDish = lasagna;
-
-        cout << "Bebida" << endl;
-        cout << "1. Cerveza" << endl;
-        cout << "2. Soda" << endl;
-        cout << "3. Te helado" << endl;
-        cout << "Su opcion:\t"; cin >> aux;
-        cin.ignore();
-
-        if(aux == 1)
-            array[i].houseInfo.pDrink = beer;
-        else if(aux == 2)
-            array[i].houseInfo.pDrink = soda;
-        else
-            array[i].houseInfo.pDrink = tea;
-
-        array[i].houseInfo.idOrder = idOrder++;
+                switch(aux){
+            case 1:
+                beer;
+            break;
+            case 2:
+                soda;
+            break;
+            case 3:
+                tea;
+            break;
+        }
 
         cout << "Tipo de pago" << endl;
-        cout << "1. Tarjeta" << endl;
-        cout << "2. Efectivo" << endl;
-        cout << "Su opcion:\t"; cin >> aux;
-        cin.ignore();
+        cout << "1. Efectivo" << endl;
+        cout << "2. Tarjeta";
+        cin >> aux;
 
-        if(aux == 1)
-            array[i].houseInfo.pay = card;
-        else
-            array[i].houseInfo.pay = cash;
+        switch(aux){
+            case 1:
+                cash;
+            break;
+            case 2:
+                card;
+            break;
+        }
 
-        cout << "Monto: "; cin >> array[i].houseInfo.total;
-        cin.ignore();
-
+    
+    return p;   
     }
-
 }
 
-void printOrder(delivery* array){
-
-    for (int i = 0; i < adoN; i++){
-        cout << "Nombre:\t"<<array[i].deliveryInfo.name;
-        cout << "Direccion\t" << endl;
-        cout << "Colonia:\t" <<array[i].deliveryAddress.settlement;
-        cout << "Municipio:\t" <<array[i].deliveryAddress.municipality;
-        cout << "Departamento:\t" << array[i].deliveryAddress.department;
-        cout << "No. casa:\t"<< array[i].deliveryAddress.houseNumber;
-    }
-
-}
-
-void printOrder(houseOrder* array){
-
-    for (int i = 0; i < adoN; i++){
-        cout << "Nombre:\t"<<array[i].houseInfo .name<<endl;
-        cout << "Numero de personas por mesa: "<<endl;
-        cout << "Ingrese el plato principal: 1.Pizza 2.Pasta 3.Lasagna"<<endl;
-        cout << "Ingrese la bebida: 1.Cerveza 2.Soda 3.Te helado"<< endl;
-        cout << "Ingrese la entrada: 1.Rollos de piza 2.Pan con ajo 3.Palitos de queso";
-        cout << "Monto: ";
-        cout << "Tipo de pago";
-    }
-
-}
