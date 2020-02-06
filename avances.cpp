@@ -46,6 +46,9 @@ bool loginUser(void);
 void AdminMenu();
 void EmployeeMenu();
 mainInfo solicitarOrden();
+void printMenu(mainInfo p, address a);
+void mostrarLista();
+void agregarOrden();
 
 int main(void){
     int option;
@@ -97,14 +100,12 @@ bool loginUser(void){
     return false;
 }
 
-
-//funcion
 void AdminMenu(){
 
     int option;
     do{
-    cout<<"1. Agregar 1 pedido a domicilio."<<endl; 
-    cout<<"2. Agregar 1 encargo en restaurante."<<endl; 
+    cout<<"1. Agregar 1 pedido a domicilio."<<endl;
+    cout<<"2. Agregar 1 encargo en restaurante."<<endl;
     cout<<"3. Ver pedidos a domicilio."<<endl;
     cout<<"4. Ver pedidos en el restaurante."<<endl;
     cout<<"5. Despachar ordenes a domicilio"<<endl;
@@ -115,16 +116,17 @@ void AdminMenu(){
     cout<<"10. Calcular total de venta."<<endl;
     cout<<"11. Cambiar de usuario"<<endl;
     cout<<"0. Salir\n Opcion "<<endl;
-    cin >> option;
-    
+    cin >> option; cin.ignore();
+
         switch (option)
         {
         case 1:
-            mainInfo solicitarOrden();
+            solicitarOrden();
         break;
         case 2:
         break;
         case 3:
+            mostrarLista();
         break;
         case 4:
         break;
@@ -145,7 +147,6 @@ void AdminMenu(){
         break;
         default:
         break;
-
         cin.ignore();
     }
 
@@ -170,18 +171,19 @@ void EmployeeMenu(){
     cout<<"9. Calcular total de venta."<<endl;
     cout<<"10. Cambiar de usuario"<<endl;
     cout<<"0. Salir\n Opcion "<<endl;
-    cin >> option;
+    cin >> option;  cin.ignore();
 
 
 
         switch (option)
         {
         case 1:
-            mainInfo solicitarOrden();
+            solicitarOrden();
         break;
         case 2:
         break;
         case 3:
+            mostrarLista();
         break;
         case 4:
         break;
@@ -207,12 +209,21 @@ void EmployeeMenu(){
     }while(option != 0);
 }
 
-vector<mainInfo> lista;
+vector <mainInfo> lista;
+
+void agregarOrden(){
+    mainInfo p = solicitarOrden();
+        bool continuar = true;
+    do{
+        lista.insert(lista.begin(), p);
+        continuar = false;
+    }while(continuar);
+
+}
 
 mainInfo solicitarOrden(){
     mainInfo p;
     address a;
-
     int size = 0;
     cout << "Cantidad de pedidos a ingresar: ";
     cin >> size;
@@ -220,24 +231,25 @@ mainInfo solicitarOrden(){
 
     for (int i = 0; i < size; i++){
         int aux = 0;
-        cout << "Nombre:\t"; 
+        cout << "Nombre:\t";
         cin >> p.name;
-        cout << "Direccion\t" << endl;
+        cout << "Direccion->\t";
         cout << "Colonia:\t";
         cin >> a.settlement;
-        cout << "Municipio:\t"; 
+        cout << "Municipio:\t";
         cin >> a.municipality;
-        cout << "Departamento:\t"; 
+        cout << "Departamento:\t";
         cin >> a.department;
         cout << "No. casa:\t";
-        cin >> a.houseNumber; 
+        cin >> a.houseNumber;
         cin.ignore();
 
         cout << "Entrada: " << endl;
         cout << "1. Pan con ajo" << endl;
         cout << "2. Pizza rolls" << endl;
         cout << "3. Palitos de queso" << endl;
-        cout << "Su opcion:\t"; cin >> aux;
+        cout << "Su opcion:\t";
+        cin >> aux;
         cin.ignore();
 
         int contBread = 0;
@@ -264,6 +276,7 @@ mainInfo solicitarOrden(){
         cout << "2. Pasta " << endl;
         cout << "3. Lasagna " << endl;
         cin >> aux;
+        cin.ignore();
 
                 switch(aux){
             case 1:
@@ -282,6 +295,7 @@ mainInfo solicitarOrden(){
         cout << "2. Soda " << endl;
         cout << "3. Te " << endl;
         cin >> aux;
+        cin.ignore();
 
                 switch(aux){
             case 1:
@@ -299,6 +313,7 @@ mainInfo solicitarOrden(){
         cout << "1. Efectivo" << endl;
         cout << "2. Tarjeta";
         cin >> aux;
+        cin.ignore();
 
         switch(aux){
             case 1:
@@ -309,8 +324,23 @@ mainInfo solicitarOrden(){
             break;
         }
 
-    
-    return p;   
     }
+    return p;
+
+}
+
+void printMenu(mainInfo p, address a){
+
+    cout << "Nombre: " << p.name << endl;
+    cout << "Direccion: " << endl;
+    cout << "Colonia: " << a.settlement << endl;
+    cout << "Municipio: " << a.municipality << endl;
+    cout << "Departamento: " << a.department << endl;
+    cout << endl;
+}
+
+void mostrarLista() {
+    for (int i = 0; i < lista.size(); i++)
+        printMenu(lista[i]);
 }
 
