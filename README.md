@@ -1,5 +1,5 @@
 <dl>
-    <h1>Pizzería <strong>XXXXXXXXXX</strong></h1>
+    <h1>Pizzería <strong>PizzaBox</strong></h1>
     <h3><strong>Sumario</strong></h3>
     <hr>
     <ol>
@@ -470,26 +470,26 @@
     <p>
         <em>¿Qué aprendí con la realización de este proyecto?</em>
         <br>
-        <small>XXXXXXXXXXX</small>
+        <small>A como usar bien la libreria vector</small>
     </p>
     <p>
         <em>¿Qué fue lo más difícil de implementar?</em>
         <br>
-        <small>XXXXXXXXXXX</small>
+        <small>Calcular el total o el promedio del tiempo</small>
     </p>
     <p>
         <em>¿Qué fue lo más fácil de implementar?</em>
         <br>
-        <small>XXXXXXXXXXX</small>
+        <small>El menu de admin o empleado.</small>
     </p>
     <p>
         <em>¿Qué cambiaría en el desempeño del catedrático?</em>
         <br>
-        <small>XXXXXXXXXXX</small>
+        <small>No, ha hecho un trabajo excelente.</small>
     </p>
     <p>
         <em>¿Qué cambiaría en el desempeño del instructor?</em>
         <br>
-        <small>XXXXXXXXXXX</small>
+        <small>Nada, lo hizo muy bien, siempre tomaba en cuenta nuestras opiniones</small>
     </p>
 </dl>
