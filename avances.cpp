@@ -23,7 +23,11 @@ struct mainInfo{
     paymenType pay;
     int idOrder;
     float total;
+    address Address;
 };
+
+
+vector <mainInfo> lista;
 
 struct delivery{
     address deliveryAddress;
@@ -46,9 +50,10 @@ bool loginUser(void);
 void AdminMenu();
 void EmployeeMenu();
 mainInfo solicitarOrden();
-void printMenu(mainInfo p, address a);
+void printMenu(mainInfo p);
 void mostrarLista();
 void agregarOrden();
+mainInfo solicitarOrdenHouse();
 
 int main(void){
     int option;
@@ -121,9 +126,10 @@ void AdminMenu(){
         switch (option)
         {
         case 1:
-            solicitarOrden();
+            lista.insert(lista.end(),solicitarOrden());
         break;
         case 2:
+            solicitarOrdenHouse();
         break;
         case 3:
             mostrarLista();
@@ -178,9 +184,10 @@ void EmployeeMenu(){
         switch (option)
         {
         case 1:
-            solicitarOrden();
+            lista.insert(lista.end(),solicitarOrden());
         break;
         case 2:
+            solicitarOrdenHouse();
         break;
         case 3:
             mostrarLista();
@@ -209,8 +216,6 @@ void EmployeeMenu(){
     }while(option != 0);
 }
 
-vector <mainInfo> lista;
-
 void agregarOrden(){
     mainInfo p = solicitarOrden();
         bool continuar = true;
@@ -221,9 +226,8 @@ void agregarOrden(){
 
 }
 
-mainInfo solicitarOrden(){
+mainInfo agregarOrdenHouse(){
     mainInfo p;
-    address a;
     int size = 0;
     cout << "Cantidad de pedidos a ingresar: ";
     cin >> size;
@@ -235,13 +239,13 @@ mainInfo solicitarOrden(){
         cin >> p.name;
         cout << "Direccion->\t";
         cout << "Colonia:\t";
-        cin >> a.settlement;
+        cin >> p.Address.settlement;
         cout << "Municipio:\t";
-        cin >> a.municipality;
+        cin >> p.Address.municipality;
         cout << "Departamento:\t";
-        cin >> a.department;
+        cin >> p.Address.department;
         cout << "No. casa:\t";
-        cin >> a.houseNumber;
+        cin >> p.Address.houseNumber;
         cin.ignore();
 
         cout << "Entrada: " << endl;
@@ -252,24 +256,12 @@ mainInfo solicitarOrden(){
         cin >> aux;
         cin.ignore();
 
-        int contBread = 0;
-        int contRolls = 0;
-        int contSticks = 0;
-
         switch(aux){
-            case 1:
-                garlicBread;
-                contBread ++;
-            break;
-            case 2:
-                pizzaRolls;
-                contRolls ++;
-            break;
-            case 3:
-                cheeseSticks;
-                contSticks++;
-            break;
+            case 1: p.pStarter.insert(p.pStarter.end(), garlicBread); break;
+            case 2: p.pStarter.insert(p.pStarter.end(), pizzaRolls); break;
+            case 3: p.pStarter.insert(p.pStarter.end(), cheeseSticks); break;
         }
+        //.pStarter[i]
 
         cout << "Plato principal: " << endl;
         cout << "1. Pizza " << endl;
@@ -279,15 +271,9 @@ mainInfo solicitarOrden(){
         cin.ignore();
 
                 switch(aux){
-            case 1:
-                pizza;
-            break;
-            case 2:
-                pasta;
-            break;
-            case 3:
-                lasagna;
-            break;
+                case 1: p.pDish.insert(p.pDish.end(), pizza); break;
+                case 2: p.pDish.insert(p.pDish.end(), pasta); break;
+                case 3: p.pDish.insert(p.pDish.end(), lasagna); break;
         }
 
         cout << "Bebidas: " << endl;
@@ -298,15 +284,10 @@ mainInfo solicitarOrden(){
         cin.ignore();
 
                 switch(aux){
-            case 1:
-                beer;
-            break;
-            case 2:
-                soda;
-            break;
-            case 3:
-                tea;
-            break;
+                case 1: p.pDrink.insert(p.pDrink.end(), beer); break;
+                case 2: p.pDrink.insert(p.pDrink.end(), soda); break;
+                case 3: p.pDrink.insert(p.pDrink.end(), tea); break;
+
         }
 
         cout << "Tipo de pago" << endl;
@@ -314,28 +295,105 @@ mainInfo solicitarOrden(){
         cout << "2. Tarjeta";
         cin >> aux;
         cin.ignore();
-
-        switch(aux){
-            case 1:
-                cash;
-            break;
-            case 2:
-                card;
-            break;
-        }
-
     }
     return p;
 
 }
 
-void printMenu(mainInfo p, address a){
+mainInfo solicitarOrdenHouse(){
+        mainInfo p = solicitarOrden();
+        bool continuar = true;
+    do{
+        lista.insert(lista.begin(), p);
+        continuar = false;
+    }while(continuar);
+
+}
+
+mainInfo solicitarOrden(){
+    mainInfo p;
+    int size = 0;
+    cout << "Cantidad de pedidos a ingresar: ";
+    cin >> size;
+    cin.ignore();
+
+    for (int i = 0; i < size; i++){
+        int aux = 0;
+        cout << "Nombre:\t";
+        cin >> p.name;
+        cout << "Direccion->\t";
+        cout << "Colonia:\t";
+        cin >> p.Address.settlement;
+        cout << "Municipio:\t";
+        cin >> p.Address.municipality;
+        cout << "Departamento:\t";
+        cin >> p.Address.department;
+        cout << "No. casa:\t";
+        cin >> p.Address.houseNumber;
+        cin.ignore();
+
+        cout << "Entrada: " << endl;
+        cout << "1. Pan con ajo" << endl;
+        cout << "2. Pizza rolls" << endl;
+        cout << "3. Palitos de queso" << endl;
+        cout << "Su opcion:\t";
+        cin >> aux;
+        cin.ignore();
+
+        switch(aux){
+            case 1: p.pStarter.insert(p.pStarter.end(), garlicBread); break;
+            case 2: p.pStarter.insert(p.pStarter.end(), pizzaRolls); break;
+            case 3: p.pStarter.insert(p.pStarter.end(), cheeseSticks); break;
+        }
+        //.pStarter[i]
+
+        cout << "Plato principal: " << endl;
+        cout << "1. Pizza " << endl;
+        cout << "2. Pasta " << endl;
+        cout << "3. Lasagna " << endl;
+        cin >> aux;
+        cin.ignore();
+
+                switch(aux){
+                case 1: p.pDish.insert(p.pDish.end(), pizza); break;
+                case 2: p.pDish.insert(p.pDish.end(), pasta); break;
+                case 3: p.pDish.insert(p.pDish.end(), lasagna); break;
+        }
+
+        cout << "Bebidas: " << endl;
+        cout << "1. Cerveza " << endl;
+        cout << "2. Soda " << endl;
+        cout << "3. Te " << endl;
+        cin >> aux;
+        cin.ignore();
+
+                switch(aux){
+                case 1: p.pDrink.insert(p.pDrink.end(), beer); break;
+                case 2: p.pDrink.insert(p.pDrink.end(), soda); break;
+                case 3: p.pDrink.insert(p.pDrink.end(), tea); break;
+
+        }
+
+        cout << "Tipo de pago" << endl;
+        cout << "1. Efectivo" << endl;
+        cout << "2. Tarjeta";
+        cin >> aux;
+        cin.ignore();
+    }
+    return p;
+
+}
+
+void printMenu(mainInfo p){
+
+    cout << "Hola mundo"<<endl;
 
     cout << "Nombre: " << p.name << endl;
     cout << "Direccion: " << endl;
-    cout << "Colonia: " << a.settlement << endl;
-    cout << "Municipio: " << a.municipality << endl;
-    cout << "Departamento: " << a.department << endl;
+    cout << "Colonia: " << p.Address.settlement << endl;
+    cout << "Municipio: " << p.Address.municipality << endl;
+    cout << "Departamento: " << p.Address.department << endl;
+    cout << "No de casa" << p.Address.houseNumber<<endl;
     cout << endl;
 }
 
@@ -343,4 +401,3 @@ void mostrarLista() {
     for (int i = 0; i < lista.size(); i++)
         printMenu(lista[i]);
 }
-
