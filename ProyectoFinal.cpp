@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ostream>
 #include <string>
 #include <vector>
 #define PASSWORD "include"
@@ -20,14 +21,13 @@ struct mainInfo{
     vector <mainDish> pDish;
     vector <drink> pDrink;
     vector <starter> pStarter;
-    paymenType pay;
+    vector <paymenType> pay;
     int idOrder;
     float total;
     address Address;
+    int numberPe;
+    int number;
 };
-
-
-vector <mainInfo> lista;
 
 struct delivery{
     address deliveryAddress;
@@ -35,13 +35,17 @@ struct delivery{
     mainInfo deliveryInfo;
 };
 
-struct houseOrder{
+struct RestaurantOrder{
     int pTable;
-    mainInfo houseInfo;
+    mainInfo restaurantInfo;
 };
 
+vector <mainInfo> lista;
+vector <delivery> listaDelivery;
+vector <RestaurantOrder> ListaRest;
 
 bool isAdmin = false;
+double timepromD=0,timepromR=0;
 int idOrder = 1;
 bool loginUser(void);
 
@@ -49,11 +53,15 @@ void Menu(); //declarando prototipo de la funcion SIEMPRE ANTES DEL MAIN
 bool loginUser(void);
 void AdminMenu();
 void EmployeeMenu();
-mainInfo solicitarOrden();
-void printMenu(mainInfo p);
-void mostrarLista();
-void agregarOrden();
-mainInfo solicitarOrdenHouse();
+delivery AddOrderDelivery();
+void printDeliveryOrders(mainInfo p);
+void ShowListDeli();
+void ShowListRest();
+RestaurantOrder AddOrderAtRes();
+void printRestaurantOrders(RestaurantOrder r);
+void TimePromD(double);
+void TimePromR(double);
+
 
 int main(void){
     int option;
@@ -107,6 +115,8 @@ bool loginUser(void){
 
 void AdminMenu(){
 
+    double time=-1;
+
     int option;
     do{
     cout<<"1. Agregar 1 pedido a domicilio."<<endl;
@@ -126,23 +136,26 @@ void AdminMenu(){
         switch (option)
         {
         case 1:
-            lista.insert(lista.end(),solicitarOrden());
+            listaDelivery.insert(listaDelivery.end(),AddOrderDelivery());
         break;
         case 2:
-            solicitarOrdenHouse();
+            ListaRest.insert(ListaRest.end(),AddOrderAtRes());
         break;
         case 3:
-            mostrarLista();
+            ShowListDeli();
         break;
         case 4:
+            ShowListRest();
         break;
         case 5:
         break;
         case 6:
         break;
         case 7:
+            TimePromD(time);
         break;
         case 8:
+            TimePromR(time);
         break;
         case 9:
         break;
@@ -162,6 +175,7 @@ void AdminMenu(){
 
 void EmployeeMenu(){
 
+    double time=-1;
     int option;
 
     do{
@@ -184,23 +198,26 @@ void EmployeeMenu(){
         switch (option)
         {
         case 1:
-            lista.insert(lista.end(),solicitarOrden());
+            listaDelivery.insert(listaDelivery.end(),AddOrderDelivery());
         break;
         case 2:
-            solicitarOrdenHouse();
+            ListaRest.insert(ListaRest.end(),AddOrderAtRes());
         break;
         case 3:
-            mostrarLista();
+            ShowListDeli();
         break;
         case 4:
+            ShowListRest();
         break;
         case 5:
         break;
         case 6:
         break;
         case 7:
+            TimePromD(time);
         break;
         case 8:
+            TimePromR(time);
         break;
         case 9:
         break;
@@ -216,38 +233,32 @@ void EmployeeMenu(){
     }while(option != 0);
 }
 
-void agregarOrden(){
-    mainInfo p = solicitarOrden();
+
+RestaurantOrder AddOrdenRes(){
+    RestaurantOrder r = AddOrderAtRes();
         bool continuar = true;
     do{
-        lista.insert(lista.begin(), p);
+        ListaRest.insert(ListaRest.begin(), r);
         continuar = false;
     }while(continuar);
 
 }
 
-mainInfo agregarOrdenHouse(){
-    mainInfo p;
+RestaurantOrder AddOrderAtRes(){
+    RestaurantOrder r;
+
     int size = 0;
     cout << "Cantidad de pedidos a ingresar: ";
     cin >> size;
     cin.ignore();
 
     for (int i = 0; i < size; i++){
+        double totalprice = 0, time = 0;
         int aux = 0;
         cout << "Nombre:\t";
-        cin >> p.name;
-        cout << "Direccion->\t";
-        cout << "Colonia:\t";
-        cin >> p.Address.settlement;
-        cout << "Municipio:\t";
-        cin >> p.Address.municipality;
-        cout << "Departamento:\t";
-        cin >> p.Address.department;
-        cout << "No. casa:\t";
-        cin >> p.Address.houseNumber;
-        cin.ignore();
-
+        getline(cin,r.restaurantInfo.name);
+        cout << "Ingrese el numero de personas:" << endl;
+        cin >> r.restaurantInfo.numberPe;
         cout << "Entrada: " << endl;
         cout << "1. Pan con ajo" << endl;
         cout << "2. Pizza rolls" << endl;
@@ -256,10 +267,21 @@ mainInfo agregarOrdenHouse(){
         cin >> aux;
         cin.ignore();
 
+        if(aux==1){
+            totalprice=totalprice+2;
+            time = time + 2;
+        }else if(aux==2){
+            totalprice=totalprice+2.50;
+            time = time + 3;
+        }else{
+            totalprice=totalprice+3.25;
+            time = time + 3;
+        }
+
         switch(aux){
-            case 1: p.pStarter.insert(p.pStarter.end(), garlicBread); break;
-            case 2: p.pStarter.insert(p.pStarter.end(), pizzaRolls); break;
-            case 3: p.pStarter.insert(p.pStarter.end(), cheeseSticks); break;
+            case 1: r.restaurantInfo.pStarter.insert(r.restaurantInfo.pStarter.end(), garlicBread); break;
+            case 2: r.restaurantInfo.pStarter.insert(r.restaurantInfo.pStarter.end(), pizzaRolls); break;
+            case 3: r.restaurantInfo.pStarter.insert(r.restaurantInfo.pStarter.end(), cheeseSticks); break;
         }
         //.pStarter[i]
 
@@ -270,10 +292,21 @@ mainInfo agregarOrdenHouse(){
         cin >> aux;
         cin.ignore();
 
+        if(aux==1){
+            totalprice=totalprice+7.50;
+            time = time + 4;
+        }else if(aux==2){
+            totalprice=totalprice+6.25;
+            time = time + 3;
+        }else{
+            totalprice=totalprice+9.25;
+            time = time + 5;
+        }
+
                 switch(aux){
-                case 1: p.pDish.insert(p.pDish.end(), pizza); break;
-                case 2: p.pDish.insert(p.pDish.end(), pasta); break;
-                case 3: p.pDish.insert(p.pDish.end(), lasagna); break;
+                case 1: r.restaurantInfo.pDish.insert(r.restaurantInfo.pDish.end(), pizza); break;
+                case 2: r.restaurantInfo.pDish.insert(r.restaurantInfo.pDish.end(), pasta); break;
+                case 3: r.restaurantInfo.pDish.insert(r.restaurantInfo.pDish.end(), lasagna); break;
         }
 
         cout << "Bebidas: " << endl;
@@ -283,53 +316,76 @@ mainInfo agregarOrdenHouse(){
         cin >> aux;
         cin.ignore();
 
-                switch(aux){
-                case 1: p.pDrink.insert(p.pDrink.end(), beer); break;
-                case 2: p.pDrink.insert(p.pDrink.end(), soda); break;
-                case 3: p.pDrink.insert(p.pDrink.end(), tea); break;
-
+         if(aux==1){
+            totalprice=totalprice+2;
+            time = time + 2;
+        }else if(aux==2){
+            totalprice=totalprice+2.50;
+            time = time + 2;
+        }else{
+            totalprice=totalprice+2;
+            time = time + 2;
         }
+
+
+                switch(aux){
+                case 1: r.restaurantInfo.pDrink.insert(r.restaurantInfo.pDrink.end(), beer); break;
+                case 2: r.restaurantInfo.pDrink.insert(r.restaurantInfo.pDrink.end(), soda); break;
+                case 3: r.restaurantInfo.pDrink.insert(r.restaurantInfo.pDrink.end(), tea); break;
+            }
+
+        TimePromR(time);
+
+        cout<<endl<<"Cancelar por orden: $"<<totalprice<<endl<<endl;
 
         cout << "Tipo de pago" << endl;
         cout << "1. Efectivo" << endl;
         cout << "2. Tarjeta";
         cin >> aux;
+
+        switch(aux){
+            case 1: r.restaurantInfo.pay.insert(r.restaurantInfo.pay.end(),cash);break;
+            case 2: r.restaurantInfo.pay.insert(r.restaurantInfo.pay.end(),card);break;
+        }
         cin.ignore();
     }
-    return p;
+    return r;
 
 }
 
-mainInfo solicitarOrdenHouse(){
-        mainInfo p = solicitarOrden();
+delivery agregarOrden(){
+    delivery d = AddOrderDelivery();
         bool continuar = true;
     do{
-        lista.insert(lista.begin(), p);
+        listaDelivery.insert(listaDelivery.begin(), d);
         continuar = false;
     }while(continuar);
 
 }
 
-mainInfo solicitarOrden(){
-    mainInfo p;
+delivery AddOrderDelivery(){
+    delivery d;
     int size = 0;
     cout << "Cantidad de pedidos a ingresar: ";
     cin >> size;
     cin.ignore();
 
     for (int i = 0; i < size; i++){
+        double totalprice = 0, time = 0;
         int aux = 0;
         cout << "Nombre:\t";
-        cin >> p.name;
+        getline(cin,d.deliveryInfo.name);
         cout << "Direccion->\t";
         cout << "Colonia:\t";
-        cin >> p.Address.settlement;
+        getline(cin,d.deliveryInfo.Address.settlement);
         cout << "Municipio:\t";
-        cin >> p.Address.municipality;
+        getline(cin,d.deliveryInfo.Address.municipality);
         cout << "Departamento:\t";
-        cin >> p.Address.department;
+        getline(cin,d.deliveryInfo.Address.department);
         cout << "No. casa:\t";
-        cin >> p.Address.houseNumber;
+        cin >> d.deliveryInfo.Address.houseNumber;
+        cout << "Ingrese su numero de telefono" << endl;
+        cin >> d.deliveryInfo.number;
         cin.ignore();
 
         cout << "Entrada: " << endl;
@@ -340,12 +396,24 @@ mainInfo solicitarOrden(){
         cin >> aux;
         cin.ignore();
 
-        switch(aux){
-            case 1: p.pStarter.insert(p.pStarter.end(), garlicBread); break;
-            case 2: p.pStarter.insert(p.pStarter.end(), pizzaRolls); break;
-            case 3: p.pStarter.insert(p.pStarter.end(), cheeseSticks); break;
+        if(aux==1){
+            totalprice=totalprice+2;
+            time = time + 2;
+        }else if(aux==2){
+            totalprice=totalprice+2.50;
+            time = time + 3;
+        }else{
+            totalprice=totalprice+3.25;
+            time = time + 3;
         }
-        //.pStarter[i]
+
+
+
+        switch(aux){
+            case 1: d.deliveryInfo.pStarter.insert(d.deliveryInfo.pStarter.end(), garlicBread); break;
+            case 2: d.deliveryInfo.pStarter.insert(d.deliveryInfo.pStarter.end(), pizzaRolls); break;
+            case 3: d.deliveryInfo.pStarter.insert(d.deliveryInfo.pStarter.end(), cheeseSticks); break;
+        }
 
         cout << "Plato principal: " << endl;
         cout << "1. Pizza " << endl;
@@ -354,10 +422,21 @@ mainInfo solicitarOrden(){
         cin >> aux;
         cin.ignore();
 
+         if(aux==1){
+            totalprice=totalprice+7.50;
+            time = time + 4;
+        }else if(aux==2){
+            totalprice=totalprice+6.25;
+            time = time + 3;
+        }else{
+            totalprice=totalprice+9.25;
+            time = time + 5;
+        }
+
                 switch(aux){
-                case 1: p.pDish.insert(p.pDish.end(), pizza); break;
-                case 2: p.pDish.insert(p.pDish.end(), pasta); break;
-                case 3: p.pDish.insert(p.pDish.end(), lasagna); break;
+                case 1: d.deliveryInfo.pDish.insert(d.deliveryInfo.pDish.end(), pizza); break;
+                case 2: d.deliveryInfo.pDish.insert(d.deliveryInfo.pDish.end(), pasta); break;
+                case 3: d.deliveryInfo.pDish.insert(d.deliveryInfo.pDish.end(), lasagna); break;
         }
 
         cout << "Bebidas: " << endl;
@@ -367,37 +446,112 @@ mainInfo solicitarOrden(){
         cin >> aux;
         cin.ignore();
 
+        if(aux==1){
+            totalprice=totalprice+2;
+            time= time+2;
+        }else if(aux==2){
+            totalprice=totalprice+2.50;
+            time= time+2;
+        }else{
+            totalprice=totalprice+2;
+            time= time+2;
+        }
+
                 switch(aux){
-                case 1: p.pDrink.insert(p.pDrink.end(), beer); break;
-                case 2: p.pDrink.insert(p.pDrink.end(), soda); break;
-                case 3: p.pDrink.insert(p.pDrink.end(), tea); break;
+                case 1: d.deliveryInfo.pDrink.insert(d.deliveryInfo.pDrink.end(), beer); break;
+                case 2: d.deliveryInfo.pDrink.insert(d.deliveryInfo.pDrink.end(), soda); break;
+                case 3: d.deliveryInfo.pDrink.insert(d.deliveryInfo.pDrink.end(), tea); break;
 
         }
+
+        TimePromD(time);
+
+        cout<<endl<<"Cancelar por orden: $"<<totalprice<<endl<<endl;
+
 
         cout << "Tipo de pago" << endl;
         cout << "1. Efectivo" << endl;
         cout << "2. Tarjeta";
         cin >> aux;
+
+        switch(aux){
+            case 1: d.deliveryInfo.pay.insert(d.deliveryInfo.pay.end(),cash);break;
+            case 2: d.deliveryInfo.pay.insert(d.deliveryInfo.pay.end(),card);break;
+        }
         cin.ignore();
     }
-    return p;
+    return d;
 
 }
 
-void printMenu(mainInfo p){
+void printDeliveryOrders(delivery d){
 
-    cout << "Hola mundo"<<endl;
-
-    cout << "Nombre: " << p.name << endl;
+    cout << "Nombre: " << d.deliveryInfo.name << endl;
     cout << "Direccion: " << endl;
-    cout << "Colonia: " << p.Address.settlement << endl;
-    cout << "Municipio: " << p.Address.municipality << endl;
-    cout << "Departamento: " << p.Address.department << endl;
-    cout << "No de casa" << p.Address.houseNumber<<endl;
-    cout << endl;
+    cout << "Colonia: " << d.deliveryInfo.Address.settlement << endl;
+    cout << "Municipio: " << d.deliveryInfo.Address.municipality << endl;
+    cout << "Departamento: " << d.deliveryInfo.Address.department << endl;
+    cout << "No de casa" << d.deliveryInfo.Address.houseNumber << endl;
+    cout << "Numero de telefono: " << d.deliveryInfo.number << endl;
+
+    for(int i = 0; i <= listaDelivery.size(); i++){
+        cout << "Entrada: " << d.deliveryInfo.pStarter[i] << " " << endl;
+        cout << "Plato Principal"<< d.deliveryInfo.pDish[i] << " " << endl;
+        cout << "Bebida" << d.deliveryInfo.pDrink[i] << " " << endl;
+        cout << "Tipo de pago" << d.deliveryInfo.pay[i] << " " << endl;
+    }
 }
 
-void mostrarLista() {
-    for (int i = 0; i < lista.size(); i++)
-        printMenu(lista[i]);
+void printRestaurantOrders(RestaurantOrder r){
+    cout << "Nombre: " << r.restaurantInfo.name << endl;
+    cout << "Numero de personas en mesa: " <<r.restaurantInfo.numberPe;
+
+    for(int i = 0; listaDelivery.size(); i++)
+        cout << r.restaurantInfo.pStarter[i];
+
+    for(int i = 0; listaDelivery.size(); i++)
+        cout << r.restaurantInfo.pDish[i];
+
+    for(int i = 0; listaDelivery.size(); i++)
+        cout << r.restaurantInfo.pDrink[i];
+
+    for(int i = 0; listaDelivery.size(); i++)
+        cout << r.restaurantInfo.pay[i];
+
+}
+
+void ShowListDeli() {
+        cout << "cantidad " << listaDelivery.size() << endl;
+    for (int i = 0; i < listaDelivery.size(); i++)
+        printDeliveryOrders(listaDelivery[i]);
+}
+
+void ShowListRest() {
+    cout << "cantidad " << ListaRest.size() << endl;
+    for (int i = 0; i < ListaRest.size(); i++)
+        printRestaurantOrders(ListaRest[i]);
+}
+
+void TimePromD(double time){
+
+    if(timepromD==0){
+            timepromD=time;
+    }else if(timepromD <= 1){
+        timepromD=(timepromD+time)/2;
+    }
+
+    cout<<endl<<"TIEMPO PROMEDIO: "<<timepromD<<" min"<<endl<<endl;
+}
+
+void TimePromR(double time){
+
+        if(timepromR==0){
+                timepromR=time;
+        }else if(timepromR <= 1){
+            timepromR=(timepromR+time)/2;
+        }
+
+
+    cout<<endl<<"TIEMPO PROMEDIO: "<<timepromR<<" min"<<endl<<endl;
+
 }
