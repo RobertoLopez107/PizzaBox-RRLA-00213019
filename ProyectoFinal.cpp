@@ -1,15 +1,18 @@
 #include <iostream>
 #include <ostream>
-#include <string>
-#include <vector>
-#define PASSWORD "include"
+#include <string>  //Libreria para cadenas de textos
+#include <vector> //Libreria para usar vectores
+#define PASSWORD "include" //Asignacion de contraseña
 
 using namespace std;
 
+// Eunums
 enum mainDish {pizza, pasta, lasagna};
 enum drink {beer, soda, tea};
 enum starter {garlicBread, pizzaRolls, cheeseSticks};
 enum paymenType {cash, card};
+
+//Estructuras
 
 struct address{
     string settlement, municipality, department;
@@ -27,6 +30,7 @@ struct mainInfo{
     address Address;
     int numberPe;
     int number;
+    string aux;
 };
 
 struct delivery{
@@ -40,28 +44,30 @@ struct RestaurantOrder{
     mainInfo restaurantInfo;
 };
 
+//Declaracion de vectores
+
 vector <mainInfo> lista;
 vector <delivery> listaDelivery;
 vector <RestaurantOrder> ListaRest;
 
-bool isAdmin = false;
-double timepromD=0,timepromR=0;
-int idOrder = 1;
-bool loginUser(void);
+bool isAdmin = false; //Para poder iniciar sesion
+double timepromD=0,timepromR=0;  //Para calcular tiempo
+
+//Prototipos
 
 void Menu(); //declarando prototipo de la funcion SIEMPRE ANTES DEL MAIN
 bool loginUser(void); //Funcion para iniciar sesion como admin o empleado
 void AdminMenu(); //Menu para admin
 void EmployeeMenu(); //Menu para empleado
 delivery AddOrderDelivery(); //Funcion para agregar orden a domicilio
-void printDeliveryOrders(mainInfo p);
-void ShowListDeli();
-void ShowListRest();
-RestaurantOrder AddOrderAtRes();
-void printRestaurantOrders(RestaurantOrder r);
-void TimePromD(double);
-void TimePromR(double);
-string printStarter(starter s);
+void printDeliveryOrders(delivery d); //Funcion para imprimir ordenes a domicilio
+void ShowListDeli(); //Manda a llamar la funcion printDeliveryOrders
+void ShowListRest(); //Manda a llamar la funcion printRestaurantOrders
+RestaurantOrder AddOrderAtRes();  //Funcion para agregar orden en restaurante
+void printRestaurantOrders(RestaurantOrder r); //Funcion para imprimir ordenes en restaurante
+void TimePromD(double); //Funcion para calcular promedio de tiempo a domicilio
+void TimePromR(double); //Funcion para calcular promedio de tiempo en restaurante
+string printStarter(starter s);  //Convertores de los enums a string
 string printMainDish (mainDish m);
 string printDrink (drink d);
 string printPayment (paymenType p);
@@ -84,6 +90,8 @@ int main(void){
 
     return 0;
 }
+  
+//Funcion para iniciar sesion como admin o empleado
 
 bool loginUser(void){
     char option;
@@ -96,14 +104,14 @@ bool loginUser(void){
     switch(option){
         case 'a':
         case 'A':
-            cout << "Digite contrase�a: "; cin >> enterPass;
+            cout << "Digite contraseña: "; cin >> enterPass;
 
             if(enterPass.compare(PASSWORD) == 0){
                 isAdmin = true;
                 return true;
             }
             else{
-                cout << "Contrase�a incorrecta" << endl;
+                cout << "Contraseña incorrecta" << endl;
             }
 
 
@@ -116,6 +124,8 @@ bool loginUser(void){
     }
     return false;
 }
+
+//Funcion para el menu administrador
 
 void AdminMenu(){
 
@@ -177,6 +187,8 @@ void AdminMenu(){
 
 }
 
+//Menu para empleado
+
 void EmployeeMenu(){
 
     double time=-1;
@@ -202,15 +214,19 @@ void EmployeeMenu(){
         switch (option)
         {
         case 1:
-            listaDelivery.insert(listaDelivery.end(),AddOrderDelivery());
+            //Inserta datos en lista a domicilio
+            listaDelivery.insert(listaDelivery.end(),AddOrderDelivery()); 
         break;
         case 2:
+            //Inserta datos en lista de restaurante
             ListaRest.insert(ListaRest.end(),AddOrderAtRes());
         break;
         case 3:
+            //Funcion para demostrar pedido a domicilio
             ShowListDeli();
         break;
         case 4:
+            //Funcion para demostrar pedido en restaurante
             ShowListRest();
         break;
         case 5:
@@ -218,14 +234,17 @@ void EmployeeMenu(){
         case 6:
         break;
         case 7:
+            //Funcion para demostrar tiempo promedio
             TimePromD(time);
         break;
         case 8:
+            //Funcion para demostrar tiempo promedio
             TimePromR(time);
         break;
         case 9:
         break;
         case 10:
+            //Funcion para cambiar de usuario
             loginUser();
         break;
         default:
@@ -237,7 +256,7 @@ void EmployeeMenu(){
     }while(option != 0);
 }
 
-
+// Funcion que hace que funcione los insert en AddOrderAtRes
 RestaurantOrder AddOrdenRes(){
     RestaurantOrder r = AddOrderAtRes();
         bool continuar = true;
@@ -247,6 +266,8 @@ RestaurantOrder AddOrdenRes(){
     }while(continuar);
 
 }
+
+//Funcion para agregar el pedido en restaurante
 
 RestaurantOrder AddOrderAtRes(){
     RestaurantOrder r;
@@ -271,7 +292,7 @@ RestaurantOrder AddOrderAtRes(){
         cin >> aux;
         cin.ignore();
 
-        if(aux==1){
+        if(aux==1){   //Se acumulan los tiempos
             totalprice=totalprice+2;
             time = time + 2;
         }else if(aux==2){
@@ -287,7 +308,6 @@ RestaurantOrder AddOrderAtRes(){
             case 2: r.restaurantInfo.pStarter.insert(r.restaurantInfo.pStarter.end(), pizzaRolls); break;
             case 3: r.restaurantInfo.pStarter.insert(r.restaurantInfo.pStarter.end(), cheeseSticks); break;
         }
-        //.pStarter[i]
 
         cout << "Plato principal: " << endl;
         cout << "1. Pizza " << endl;
@@ -338,7 +358,7 @@ RestaurantOrder AddOrderAtRes(){
                 case 3: r.restaurantInfo.pDrink.insert(r.restaurantInfo.pDrink.end(), tea); break;
             }
 
-        TimePromR(time);
+        TimePromR(time);  //Manda a llamar la funcion de tiempo para sacar promedio
 
         cout<<endl<<"Cancelar por orden: $"<<totalprice<<endl<<endl;
 
@@ -354,9 +374,11 @@ RestaurantOrder AddOrderAtRes(){
 
         cin.ignore();
     }
-    return r;
+    return r;  //Retorna los datos ingresados
 
 }
+
+//Funcion para agregar el pedido a domicilio
 
 delivery agregarOrden(){
     delivery d = AddOrderDelivery();
@@ -367,6 +389,8 @@ delivery agregarOrden(){
     }while(continuar);
 
 }
+
+//Funcion donde se ingresan los datos a domicilio
 
 delivery AddOrderDelivery(){
     delivery d;
@@ -489,6 +513,8 @@ delivery AddOrderDelivery(){
 
 }
 
+//Funcion para imprimir los datos a domicilio
+
 void printDeliveryOrders(delivery d){
 
     cout << "Nombre: " << d.deliveryInfo.name << endl;
@@ -517,6 +543,8 @@ void printDeliveryOrders(delivery d){
 
 }
 
+//Funcion para imprimir los datos en restaurante
+
 void printRestaurantOrders(RestaurantOrder r){
     cout << "Nombre: " << r.restaurantInfo.name << endl;
     cout << "Numero de personas en mesa: " <<r.restaurantInfo.numberPe << endl;
@@ -539,17 +567,23 @@ void printRestaurantOrders(RestaurantOrder r){
 
 }
 
+//Manda a llamar la funcion printDeliveryOrders e indica la cantidad de pedidos
+
 void ShowListDeli() {
         cout << "cantidad " << listaDelivery.size() << endl;
     for (int i = 0; i < listaDelivery.size(); i++)
         printDeliveryOrders(listaDelivery[i]);
 }
 
+//Manda a llamar la funcion printRestaurantOrders e indica la cantidad de pedidos
+
 void ShowListRest() {
     cout << "cantidad " << ListaRest.size() << endl;
     for (int i = 0; i < ListaRest.size(); i++)
         printRestaurantOrders(ListaRest[i]);
 }
+
+//Funcion para calcular tiempo promedio a domicilio
 
 void TimePromD(double time){
 
@@ -561,6 +595,8 @@ void TimePromD(double time){
 
     cout<<endl<<"TIEMPO PROMEDIO: "<<timepromD<<" min"<<endl<<endl;
 }
+
+//Funcion para calcular tiempo promedio de restaurante
 
 void TimePromR(double time){
 
@@ -575,6 +611,8 @@ void TimePromR(double time){
 
 }
 
+//Convierte los ingresado en los enums a strings para las entradas
+
 string printStarter(starter s){
     string cadena = " ";
     switch (s)
@@ -585,6 +623,8 @@ string printStarter(starter s){
     }
     return cadena;
 }
+
+//Convierte los ingresado en los enums a strings para los platos principales
 
 string printMainDish (mainDish m){
     string cadena = " ";
@@ -597,6 +637,8 @@ string printMainDish (mainDish m){
     return cadena;
 }
 
+//Convierte los ingresado en los enums a strings para las bebidas
+
 string printDrink (drink d){
     string cadena = " ";
     switch (d)
@@ -607,6 +649,8 @@ string printDrink (drink d){
     }
     return cadena;
 }
+
+//Convierte los ingresado en los enums a strings para el tipo de pago
 
 string printPayment (paymenType p){
     string cadena = " ";
