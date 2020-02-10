@@ -90,7 +90,7 @@ int main(void){
 
     return 0;
 }
-  
+
 //Funcion para iniciar sesion como admin o empleado
 
 bool loginUser(void){
@@ -215,7 +215,7 @@ void EmployeeMenu(){
         {
         case 1:
             //Inserta datos en lista a domicilio
-            listaDelivery.insert(listaDelivery.end(),AddOrderDelivery()); 
+            listaDelivery.insert(listaDelivery.end(),AddOrderDelivery());
         break;
         case 2:
             //Inserta datos en lista de restaurante
@@ -293,13 +293,13 @@ RestaurantOrder AddOrderAtRes(){
         cin.ignore();
 
         if(aux==1){   //Se acumulan los tiempos
-            totalprice=totalprice+2;
+            totalprice=totalprice+3.99;
             time = time + 2;
         }else if(aux==2){
-            totalprice=totalprice+2.50;
+            totalprice=totalprice+4.99;
             time = time + 3;
         }else{
-            totalprice=totalprice+3.25;
+            totalprice=totalprice+4.75;
             time = time + 3;
         }
 
@@ -317,13 +317,13 @@ RestaurantOrder AddOrderAtRes(){
         cin.ignore();
 
         if(aux==1){
-            totalprice=totalprice+7.50;
+            totalprice=totalprice+13.99;
             time = time + 4;
         }else if(aux==2){
-            totalprice=totalprice+6.25;
+            totalprice=totalprice+5.55;
             time = time + 3;
         }else{
-            totalprice=totalprice+9.25;
+            totalprice=totalprice+6.25;
             time = time + 5;
         }
 
@@ -341,13 +341,13 @@ RestaurantOrder AddOrderAtRes(){
         cin.ignore();
 
          if(aux==1){
-            totalprice=totalprice+2;
+            totalprice=totalprice+1.99;
             time = time + 2;
         }else if(aux==2){
-            totalprice=totalprice+2.50;
+            totalprice=totalprice+0.95;
             time = time + 2;
         }else{
-            totalprice=totalprice+2;
+            totalprice=totalprice+1.15;
             time = time + 2;
         }
 
@@ -426,13 +426,13 @@ delivery AddOrderDelivery(){
         cin.ignore();
 
         if(aux==1){
-            totalprice=totalprice+2;
+            totalprice=totalprice+3.99;
             time = time + 2;
         }else if(aux==2){
-            totalprice=totalprice+2.50;
+            totalprice=totalprice+4.99;
             time = time + 3;
         }else{
-            totalprice=totalprice+3.25;
+            totalprice=totalprice+3.75;
             time = time + 3;
         }
 
@@ -452,13 +452,13 @@ delivery AddOrderDelivery(){
         cin.ignore();
 
          if(aux==1){
-            totalprice=totalprice+7.50;
+            totalprice=totalprice+13.99;
             time = time + 4;
         }else if(aux==2){
-            totalprice=totalprice+6.25;
+            totalprice=totalprice+5.55;
             time = time + 3;
         }else{
-            totalprice=totalprice+9.25;
+            totalprice=totalprice+6.25;
             time = time + 5;
         }
 
@@ -476,13 +476,13 @@ delivery AddOrderDelivery(){
         cin.ignore();
 
         if(aux==1){
-            totalprice=totalprice+2;
+            totalprice=totalprice+1.99;
             time= time+2;
         }else if(aux==2){
-            totalprice=totalprice+2.50;
+            totalprice=totalprice+0.95;
             time= time+2;
         }else{
-            totalprice=totalprice+2;
+            totalprice=totalprice+1.15;
             time= time+2;
         }
 
